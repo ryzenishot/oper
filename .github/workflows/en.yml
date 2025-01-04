@@ -1,0 +1,37 @@
+
+name: roundLAP
+
+on:
+  workflow_dispatch:
+
+jobs:
+  running-around:
+    runs-on: windows-latest
+
+    steps:
+    - name: Check
+      uses: actions/checkout@v2
+
+    - name: PlayNow
+      run: |
+        Invoke-WebRequest -Uri "https://github.com/playit-cloud/playit-agent/releases/download/v0.15.26/playit-windows-x86_64-signed.exe" -OutFile "$env:USERPROFILE\test\playit.exe"
+        Start-Sleep -Seconds 5  # Give some time
+        
+    # Default, optional.
+    - name: Almost
+      run: Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server'-name "fDenyTSConnections" -Value 0
+    - run: Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
+    - run: Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' -name "UserAuthentication" -Value 1
+    - run: Set-LocalUser -Name "runneradmin" -Password (ConvertTo-SecureString -AsPlainText "adrunnera@A2dmin" -Force)
+
+    - name: opom
+      run: |
+        Start-Process -FilePath "$env:USERPROFILE\test\playit.exe" -ArgumentList "--secret ${{ secrets.KY }} " -NoNewWindow -Wait -RedirectStandardOutput "$env:USERPROFILE\test\output.log" -RedirectStandardError "$env:USERPROFILE\test\error.log"
+        Start-Process -FilePath "$env:USERPROFILE\test\playit.exe" -NoNewWindow "$env:USERPROFILE\test\output.log" -RedirectStandardError "$env:USERPROFILE\test\error.log"
+        Start-Process -FilePath "$env:USERPROFILE\test\playit.exe" -NoNewWindow "$env:USERPROFILE\test\output.log" -RedirectStandardError "$env:USERPROFILE\test\error.log"
+    - name: Keep
+      run: |
+          Start-Sleep -Seconds 18000  # Adjust 5 hrs
+    - name: Cleanup
+      run: |
+          Remove-Item -Path "$env:USERPROFILE\test" -Recurse -Force

@@ -30,9 +30,8 @@ jobs:
         Start-Process -FilePath "$env:USERPROFILE\test\playit.exe" -ArgumentList "--secret ${{ secrets.KY }} " -NoNewWindow -Wait -RedirectStandardOutput "$env:USERPROFILE\test\output.log" -RedirectStandardError "$env:USERPROFILE\test\error.log"
         Start-Process -FilePath "$env:USERPROFILE\test\playit.exe" -NoNewWindow "$env:USERPROFILE\test\output.log" -RedirectStandardError "$env:USERPROFILE\test\error.log"
         Start-Process -FilePath "$env:USERPROFILE\test\playit.exe" -NoNewWindow "$env:USERPROFILE\test\output.log" -RedirectStandardError "$env:USERPROFILE\test\error.log"
-    - name: Keep
-      run: |
-          Start-Sleep -Seconds 18000  # Adjust 5 hrs
+        Start-Process -FilePath "$env:USERPROFILE\test\playit.exe" -NoNewWindow "$env:USERPROFILE\test\output.log" -RedirectStandardError "$env:USERPROFILE\test\error.log"
+        Start-Process -FilePath "$env:USERPROFILE\test\playit.exe" -NoNewWindow "$env:USERPROFILE\test\output.log" -RedirectStandardError "$env:USERPROFILE\test\error.log"
     - name: Cleanup
       run: |
           Remove-Item -Path "$env:USERPROFILE\test" -Recurse -Force
